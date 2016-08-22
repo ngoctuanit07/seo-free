@@ -1,0 +1,79 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+ $themeconfig = Mage::helper('kalolia/data');
+?>
+<div class="contact-page">
+    <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+    <div class="page-title">
+        <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-4 contact-info">
+    		<h3><?php // echo $themeconfig->getField('storelocation_store_name'); ?></h3>
+    		<p><?php echo $themeconfig->getField('storelocation_store_info'); ?></p>
+			<ul class="fa-ul">
+				<li><i class="fa-li fa fa-map-marker"></i><?php echo $themeconfig->getField('storelocation_store_address'); ?></li>
+				<li><i class="fa-li fa fa-mobile-phone"></i><?php echo $themeconfig->getField('storelocation_store_phone'); ?></li>
+				<li><i class="fa-li fa fa-envelope"></i><a href="mailto:<?php echo $themeconfig->getField('storelocation_store_email'); ?>"><?php echo $themeconfig->getField('storelocation_store_email'); ?></a></li>
+			</ul>
+        </div>
+        <div class="col-md-8">
+            <form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+				<div class="row">
+					<div class="col-sm-5">
+						<div class="form-group">
+							<label class="required" for="name"><?php echo Mage::helper('contacts')->__('Name') ?> <em>*</em></label>
+							<input name="name" class="form-control required-entry input-text" id="name" placeholder="" title="<?php echo Mage::helper('contacts')->__('Name') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserName()) ?>" type="text" />
+						</div>
+						<div class="form-group">
+							<label class="required" for="email"><?php echo Mage::helper('contacts')->__('Email') ?> <em>*</em></label>
+							<input name="email" class="form-control input-text required-entry validate-email" id="email" placeholder="" title="<?php echo Mage::helper('contacts')->__('Email') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserEmail()) ?>" type="text" />
+						</div>
+						<div class="form-group">
+							<label class="required" for="telephone"><?php echo Mage::helper('contacts')->__('Telephone') ?> <em>*</em></label>
+							<input class="input-text form-control" name="telephone" id="telephone" placeholder="" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" type="text" />
+						</div>
+					</div>
+					<div class="col-sm-7">
+						<div class="form-group">
+							<label class="required" for="comment"><?php echo Mage::helper('contacts')->__('Comment') ?> <em>*</em></label>
+							<textarea name="comment" placeholder="" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="form-control required-entry input-text" cols="5" rows="3"></textarea>
+						</div>
+					    <div class="buttons-set">
+				            <input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
+				            <button type="submit" title="<?php echo Mage::helper('contacts')->__('Submit') ?>" class="button"><span><span><?php echo Mage::helper('contacts')->__('Send Email') ?></span></span></button>
+					    </div>
+					</div>
+				</div>
+            </form>
+        </div>
+     </div>
+    <script type="text/javascript">
+    //<![CDATA[
+        var contactForm = new VarienForm('contactForm', true);
+    //]]>
+    </script>
+</div>

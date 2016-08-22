@@ -1,0 +1,104 @@
+<?php
+/*------------------------------------------------------------------------
+ # SNS Products - Version 1.0
+ * Copyright (C) 2013 The SNS Theme. All Rights Reserved.
+ * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
+ * Author: SNS Theme
+ * Websites: http://www.snstheme.com
+-------------------------------------------------------------------------*/
+$themeCfg =   Mage::helper('kalolia/data');
+$_productCollection = $this->getLoadedProductCollection();
+$_helper = $this->helper('catalog/output');
+$imgWidth = $this->product_image_width;
+$imgHeight = $this->product_image_height;
+if ($imgWidth <= 0 || $imgHeight <= 0){
+	$this->product_image_disp = false;
+}
+$uniqued = rand().time();
+
+$imgSize = Mage::helper('kalolia/data')->getImgSize('M');
+$imgWidth = $imgSize[0];
+$imgHeight = $imgSize[1];
+?>
+<?php if(!$_productCollection->count()): ?>
+	<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<div id="sns_lider<?php echo $uniqued; ?>" class="block">
+	<div class="slider-inner">
+		    	<div class="block-title">
+		    		<?php if($this->title!="") : ?>
+		    			<strong><?php echo $this->title;?></strong>
+					<?php endif; ?>
+					<?php if($this->product_filter_by == 'featured') : ?>
+						<a class="pull-right" href="<?php echo $this->getUrl('kalolia/pages/featured'); ?>" title="<?php echo $this->__('View All'); ?>">
+							<small>
+								<i class="fa fa-arrow-circle-right"></i>
+								<?php echo $this->__('View All'); ?>
+							</small>
+						</a>
+					<?php endif; ?>
+		    	</div>
+
+			    <div class="container-slider">
+				    <div class="products-grid mini-products-list row">
+				    <?php
+				    	$i = 0;
+						$xs = 6;
+						$sm = 4;
+						$md = 3;
+						$lg = 3;
+						$itemClass = 'col-xs-6 col-sm-4 col-md-3 col-lg-3 col-phone-12';
+				    ?>
+				    <?php foreach($_productCollection as $_product) : ?>
+				        <?php
+				        	$i++;
+					        $saleLabel = false;
+					        $newLabel = false;
+							$now = date("Y-m-d");
+					        $newsFrom= substr($_product->getData('news_from_date'),0,10);
+					        $newsTo=  substr($_product->getData('news_to_date'),0,10);
+					        $price = $_product->getPrice();
+					        $finalPrice = $_product->getFinalPrice();
+					        if(!$newsTo && $newsFrom && $now>=$newsFrom) $newLabel = true;
+					        if($newsTo && !$newsFrom && $now<=$newsTo) $newLabel = true;
+							if ($now>=$newsFrom && $now<=$newsTo && $themeCfg->getField('general_useTagNew')){ 
+								$newLabel = true;
+							}
+							if(isset($price) && isset($finalPrice) && $finalPrice < $price && $themeCfg->getField('general_useTagSale')) $saleLabel = true;
+				        ?>
+				        <div class="item <?php echo $itemClass; ?>">
+			                <div class="item-img">
+			                	<?php //if ($newLabel) echo "<span class='ico-product ico-new'>New</span>"; ?>
+			                    <a class="product-image" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+			                    	<span class="image-main">
+			                        	<img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($imgWidth, $imgHeight); ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/>
+			                    	</span>
+			                    </a>
+			                </div>
+
+			                <div class="item-info">
+			                    <div class="item-title">
+			                        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a>
+			                    </div>
+			                    <div class="rating">
+			                    	<?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+			                    </div>
+			                    <div class="item-price">
+			                        <?php echo $this->getPriceHtml($_product, false, $uniqued) ?>
+			                    	<?php if ($saleLabel) echo "<span class='ico-product ico-sale'>-".floor(100-($finalPrice/$price)*100)."%</span>"; ?>
+			                    </div>
+			                </div>
+				        </div>
+				        <?php
+				        	if($i % (12/$xs) == 0) echo '<div class="clearfix visible-xs"></div>';
+	        				if($i % (12/$md) == 0) echo '<div class="clearfix visible-md"></div>';
+	        				if($i % (12/$sm) == 0) echo '<div class="clearfix visible-sm"></div>';
+	        				if($i % (12/$lg) == 0) echo '<div class="clearfix visible-lg"></div>';
+				        ?>
+				    <?php endforeach; ?>
+				    </div>
+		</div>
+	</div>
+</div>
+
+<?php endif; ?>

@@ -1,0 +1,67 @@
+<div class="blogs-page">
+	<div class="page-title">
+		<div class="block-title">
+	    <span><span><?php echo $this->__('The Blog'); ?></span></span>
+		</div>
+	</div>
+	<?php $posts = $this->getPosts(); ?>
+	<div id="messages_product_view">
+	    <?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
+	    <?php echo Mage::app()->getLayout()->getMessagesBlock()->getGroupedHtml(); ?> 
+	</div>
+
+	 <?php //echo $this->getChildHtml('aw_blog_comments_toolbar'); ?>
+	<?php foreach ($posts as $post): ?>
+	    <div class="postWrapper">
+			 <?php	
+		            $str = $post->getPostContent();
+		            $str = preg_replace ( "/\<img[^\>]*>/", '', $post->getPostContent());
+	            ?>
+	            <a class="post-img" title="<?php echo $post->getTitle(); ?>" href="<?php echo $post->getAddress(); ?>" >
+	                <?php $imgUrl = Mage::helper('kalolia/data')->getImgUrl($post->getPostContent()); ?>
+	                <img  <?php echo $imgUrl; ?> alt="<?php echo $post->getTitle(); ?>" /> 
+	            </a>
+				<div class="date">
+					<?php $_ct= new Zend_Date($post->getCreatedTime()); ?>
+					<span class="d-month"><?php echo $_ct->toString('MMM'); ?> </span>
+					<span class="d-day"><?php echo $_ct->toString('d');  ?></span>
+				</div>
+				
+	        <div class="postTitle">
+	            <h2><a href="<?php echo $post->getAddress(); ?>" ><?php echo $post->getTitle(); ?></a></h2>
+	        </div>
+	        <div class="post-content">
+	             <?php echo Mage::helper('core/string')->truncate($str,200); ?>
+					<a  class="read-more" href="<?php echo $post->getAddress(); ?>" ><?php echo $this->__('Read more'); ?></a>
+	         </div>
+			
+	        <?php echo $this->getBookmarkHtml($post) ?>
+	        <div class="post-info">
+	            <?php if($this->getTagsHtml($post)):?>
+	            <div class="tags"><?php // echo $this->getTagsHtml($post) ?></div>
+	            <?php endif; ?>
+	            <div class="postDetails">
+	                <?php if ($this->getCommentsEnabled()): ?>
+	                  <i class="fa fa-comments"></i>  <?php echo $post->getCommentCount(); ?><a  href="<?php echo $post->getAddress(); ?>#commentBox" >Comments</a>
+	                <?php endif; ?>
+	                <?php $postCats = $post->getCats(); ?>
+	                <?php if (!empty($postCats)): ?>
+	                    <?php // echo Mage::helper('blog')->__('Posted in'); ?>
+						 <i class="fa fa-tag"></i>
+	                    <?php foreach ($postCats as $data): ?>
+	                       <a href="<?php echo $data['url']; ?>"><?php echo $data['title']; ?></a> 
+	                    <?php endforeach; ?>
+	                <?php else: ?>
+	                    <?php echo Mage::helper('blog')->__('Posted'); ?>
+	                <?php endif; ?><i class="fa fa-pencil-square-o"></i><?php // echo $this->__("By"); ?> <?php echo $post->getUser(); ?>
+	            </div>
+	        </div>
+	    </div>
+	<?php endforeach; ?> 
+
+	
+</div>
+<div class="blog-toolbar">
+	<?php echo $this->getChildHtml('aw_blog_comments_toolbar'); ?>
+	<?php //$this->getPages(); ?>
+</div>

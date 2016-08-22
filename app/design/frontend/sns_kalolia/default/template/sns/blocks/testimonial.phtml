@@ -1,0 +1,47 @@
+<?php
+	$themeCfg = Mage::helper('kalolia/data');
+
+	$enabled = $themeCfg->getField('testimonial_status');
+	if($enabled == 1) :
+		$testimonials = $themeCfg->getField('testimonial_items');
+		$array_testimonials = unserialize($testimonials);
+		$collect_testimonials = array();
+		foreach($array_testimonials as $key=>$testimonial){
+			$testimonial['description'] = Mage::helper('cms')->getBlockTemplateProcessor()->filter($testimonial['description']);
+			$collect_testimonials[] = $testimonial;
+		}
+if($collect_testimonials) :
+	$blockId ='sns_testimonial_'.rand().time();
+?>
+<div class="block_border sns_testimonial" id="<?php echo $blockId; ?>">
+	<h3><?php echo $themeCfg->getField('testimonial_title'); ?></h3>
+	<div class="block_content testimonials_slider">
+		<div class="testimonials_slider_in">
+			<div class="our_testimonials" style="display: none;">
+				<?php foreach($collect_testimonials as $testimonial) : ?>
+					<div class="wrap">
+						<div class="info">
+							<p><?php echo $testimonial['description']; ?></p>
+							<div class="tes-info">
+								<span><?php echo $testimonial['name']; ?></span>
+							</div>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
+	<script>
+		jQuery(document).ready(function($) {
+			$(window).load(function(){
+				$('#<?php echo $blockId; ?> .our_testimonials').owlCarousel({
+					singleItem: true,
+					slideSpeed : 800,
+					addClassActive: true,
+				});
+			});
+		});
+	</script>
+</div>
+<?php endif; ?>
+<?php endif; ?>

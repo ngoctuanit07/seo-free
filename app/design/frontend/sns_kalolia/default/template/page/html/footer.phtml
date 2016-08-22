@@ -1,0 +1,165 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+$themeCfg = Mage::helper('kalolia/data');
+$createBlock = $this->getLayout()->createBlock('cms/block');
+?>
+ <?php if($themeCfg->getField('storelocation_status') && $this->getChildHtml('block-gmap')) : ?>
+    <div id="contact_gmap">
+    	<div id="google_map" style="height:345px"></div>
+    	<?php echo $this->getChildHtml('block-gmap') ?>
+    </div>
+    <?php endif; ?>
+<div class="before-footer">
+	<?php
+	$staticBlock = $this->getLayout()->createBlock('cms/block')->setBlockId($themeCfg->getField('beforefooter_staticblock'))->toHtml();
+	if($themeCfg->getField('beforefooter_staticblockStatus') && $staticBlock) : 
+		echo $staticBlock;
+	endif;
+	?>
+</div>
+<div id="sns_footer_top" class="footer wrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-phone-12 col-xs-12 col-sm-6 col-md-4 column column1">
+				<?php echo $this->getLayout()->createBlock('core/template')->setTemplate('sns/blocks/socials.phtml')->toHtml(); ?>	
+				<?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe-footer.phtml')->toHtml(); ?>
+			</div>
+	
+			<?php if($themeCfg->getField('footer_staticblock_col1')) : ?>
+			<div class="col-phone-12 col-xs-12 col-sm-6 col-md-4 column column2">
+				<?php echo $createBlock->setBlockId($themeCfg->getField('footer_staticblock_col2'))->toHtml(); ?>
+			</div>
+			<?php endif; ?>
+			
+			<?php if($themeCfg->getField('footer_staticblock_col1')) : ?>
+			<div class="col-phone-12 col-xs-12 col-sm-12 col-md-4 column column3">
+				<?php echo $createBlock->setBlockId($themeCfg->getField('footer_staticblock_col3'))->toHtml(); ?>
+			</div>
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
+
+<div id="sns_footer_bottom" class="footer wrap">
+	<div class="container">
+		<?php /*
+		<div class="footer-link">
+			<?php echo $this->getChildHtml('footer_links') ?>
+		</div>
+		*/ ?>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="sns-copyright">
+					<?php echo $this->getCopyright() ?> <br />
+				</div>
+			</div>
+			<div class="col-sm-6">
+			
+				<?php echo $this->getChildHtml('kalolia_payment') ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+    $labels = '[';
+        $labels .= '"' . $this->__('Years') . '", ';
+        $labels .= '"' . $this->__('Months') . '", ';
+        $labels .= '"' . $this->__('Weeks') . '", ';
+        $labels .= '"' . $this->__('Days') . '", ';
+        $labels .= '"' . $this->__('Hrs') . '", ';
+        $labels .= '"' . $this->__('Mins') . '", ';
+        $labels .= '"' . $this->__('Secs') . '"';
+    $labels .= ']';
+    $labels1 = '[';
+        $labels1 .= '"' . $this->__('Year') . '", ';
+        $labels1 .= '"' . $this->__('Month') . '", ';
+        $labels1 .= '"' . $this->__('Week') . '", ';
+        $labels1 .= '"' . $this->__('Day') . '", ';
+        $labels1 .= '"' . $this->__('Hr') . '", ';
+        $labels1 .= '"' . $this->__('Min') . '", ';
+        $labels1 .= '"' . $this->__('Sec') . '"';
+    $labels1 .= ']';	
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+    jQuery(function($){
+    	jQuery(document).ajaxComplete(function(){
+    		//console.log('ajaxComplete');
+	   	});
+	   	jQuery(document).ajaxSuccess(function(){
+    		//console.log('ajaxSuccess');
+	   	});
+    	jQuery(document).on('ready ajaxComplete', function(){
+			// snsTooltip
+    		<?php if($themeCfg->getField('advance_showTooltip')):?>
+    		$("body#bd *[data-toggle='tooltip']").each(function(){
+    			if( $(this).parent().parent().hasClass('deals-action') ){
+    				$(this).tooltip({
+		        		container: 'body',
+		        		placement: 'right'
+		        	});
+    			}else{
+    				$(this).tooltip({
+		        		container: 'body'
+		        	});
+    			}
+    		})
+        	
+        	
+        	<?php endif; ?>
+        	// end snsTooltip
+        	// deals countdown
+			jQuery('.countdown').each(function(){
+				var enddate = jQuery(this).attr('data-endtime');
+				if(enddate) {
+					var enddateArr = enddate.split(',');
+					jQuery(this).countdown({
+				        until: new Date(enddateArr[0], enddateArr[1] - 1, enddateArr[2], enddateArr[3], enddateArr[4], enddateArr[5]),
+						labels: <?php echo $labels; ?>,
+						labels1: <?php echo $labels1; ?>
+				    });
+				}
+			});
+			// end deals countdown
+    	});
+        
+
+        <?php if($themeCfg->getField('advance_scrollAnimate')):?>
+		$('.owl-item, .item, .item-inner, [class*="col-"]').waypoint(function() {
+			$(this).addClass('animated');
+			$(this).toggleClass('fadeInUp');
+		}, {
+			offset: function() {
+				return $.waypoints('viewportHeight');
+			}
+		});
+        <?php endif; ?>
+		
+    });
+//]]>
+
+</script>

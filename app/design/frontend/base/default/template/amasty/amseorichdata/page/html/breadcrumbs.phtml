@@ -1,0 +1,26 @@
+<?php
+$hlp = Mage::helper('amseorichdata/htmlManager');
+$tag = $hlp->getCustomTag();
+?>
+<?php if($crumbs && is_array($crumbs)): ?>
+<div class="breadcrumbs">
+    <ul>
+        <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
+            <li class="<?php echo $_crumbName ?>" itemscope itemtype="<?php echo $hlp::ITEM_TYPE_BREADCRUMB ?>">
+            <?php if($_crumbInfo['link']): ?>
+                <a itemprop="url" href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($_crumbInfo['title']) ?>">
+					<<?php echo $tag ?> itemprop="title"><?php echo $this->escapeHtml($_crumbInfo['label']) ?></<?php echo $tag ?>>
+				</a>
+            <?php elseif($_crumbInfo['last']): ?>
+                <strong itemprop="title"><?php echo $this->escapeHtml($_crumbInfo['label']) ?></strong>
+            <?php else: ?>
+                <?php echo $this->escapeHtml($_crumbInfo['label']) ?>
+            <?php endif; ?>
+            <?php if(!$_crumbInfo['last']): ?>
+                <span>/ </span>
+            <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>

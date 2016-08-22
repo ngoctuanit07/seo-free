@@ -1,0 +1,10 @@
+<?php
+	$_product = Mage::registry('current_product') ? Mage::registry('current_product') : Mage::registry('product');
+?>
+<meta itemprop="sku" content="<?php echo $_product->getSku(); ?>" />
+<?php if ($_product->getManufacturer()): ?>
+<meta itemprop="brand" content="<?php echo $_product->getAttributeText('manufacturer')?>" />
+<?php endif ?>
+<?php if ($_product->getCondition()): ?>
+    <meta itemprop="itemCondition" content="<?php echo $_product->getAttributeText('condition')?>" />
+<?php endif ?>

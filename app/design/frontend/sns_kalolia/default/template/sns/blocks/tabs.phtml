@@ -1,0 +1,39 @@
+<?php
+	$uq = rand().time();
+?>
+
+
+<div class="sns-custom-tabs">
+	<div class="custom-tab-head">
+		<ul class="nav-tabs">
+			<?php $active = ' active'; ?>
+			<?php foreach ($this->getChildGroup('custom_tabs', 'getChildHtml') as $alias => $html):?>
+				<li class="<?php echo $active;?> title-font">
+					<a data-toggle="tab" href="#sns_custom_tab_<?php echo "{$alias}" . $uq; ?>">
+						<?php 
+							if ($title = $this->getChildData($alias, 'title')):
+								echo $this->escapeHtml($title);
+							else : 
+								echo ucfirst("{$alias}");
+							endif;
+						?>
+					</a>
+				</li>
+				<?php $active = ''; ?>
+			<?php endforeach;?>
+		</ul>
+				</a>
+	</div>
+
+	<div class="tab-content">
+		<?php $active = ' active in'; ?>
+		<?php foreach ($this->getChildGroup('custom_tabs', 'getChildHtml') as $alias => $html):?>
+			<div id="sns_custom_tab_<?php echo "{$alias}" . $uq; ?>" class="tab-pane<?php echo $active;?> fade">
+				<div class="collateral-box">
+					<?php echo $html ?>
+				</div>
+			</div>
+			<?php $active = ''; ?>
+		<?php endforeach;?>
+	</div>
+</div>

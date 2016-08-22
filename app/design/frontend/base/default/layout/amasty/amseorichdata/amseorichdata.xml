@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright   Copyright (c) 2014 Amasty (http://www.amasty.com)
+ */
+-->
+
+<layout version="0.1.0">
+    <catalog_product_view>
+        <reference name="alert.urls">
+            <block type="amseorichdata/product_richdata" name="product.richdata" after="-" />
+        </reference>
+    </catalog_product_view>
+
+    <review_product_list>
+        <reference name="product.info.media">
+            <block type="amseorichdata/product_richdata" name="product.richdata" after="-" output="toHtml" />
+        </reference>
+    </review_product_list>
+
+    <catalog_category_view>
+        <reference name="content">
+            <block after="category.products" type="amseorichdata/category_richdata" name="amseorichdata.category.richdata" />
+        </reference>
+
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/amasty/amseorichdata/category.css</stylesheet></action>
+        </reference>
+    </catalog_category_view>
+</layout>

@@ -1,0 +1,90 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+    <?php $stores = Mage::getSingleton('adminhtml/system_store')->getStoresStructure();?>
+    <span class="gfont"><?php echo $this->__('Language'); ?></span>
+    <ul class="list-lang">
+        <?php foreach ($stores as $store) :?>
+        <?php
+            //$storeId = Mage::app()->getStore()->getStoreId();
+            $storeId = '';
+            $langName = '';
+            $langCode = '';
+            if($store['label'] == 'my-tanks.de') {
+                $storeId = '1';
+                $langName = $this->__('German');
+                $langCode = 'germany';
+            } elseif ($store['label'] == 'my-tanks.eu') {
+                $storeId = '2';
+                $langName = 'English';
+                $langCode = 'english';
+            }
+            $url = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+        ?>
+        <li>
+            <?php if($storeId != $this->getCurrentStoreId()) : ?>
+                <a class="inactive-img" href="<?php echo $url ?>" title="<?php echo $this->escapeHtml($langName) ?>">
+                    <img src="<?php echo $this->getSkinUrl('images/flags/'.$langCode.'.png') ?>" alt="<?php echo $this->escapeHtml($langName) ?>" width="20" height="20" />
+                    <span><?php echo $this->escapeHtml($langName) ?></span>
+                </a>
+            <?php else : ?>
+                <span class="current">
+                    <img src="<?php echo $this->getSkinUrl('images/flags/'.$langCode.'.png') ?>" alt="<?php echo $this->escapeHtml($langName) ?>" width="20" height="20" />
+                    <span><?php echo $this->escapeHtml($langName); ?></span>
+                </span>
+            <?php endif; ?>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+
+<?php /*if(count($this->getStores())>1): ?>
+<?php
+	$store_code = Mage::app()->getStore()->getCode();
+	$store_name = Mage::app()->getStore()->getName();
+?>
+		<span class="gfont"><?php echo $this->__('Language'); ?></span>
+
+		<ul class="list-lang">
+			<?php foreach ($this->getStores() as $_lang): ?>
+				<li>
+					<?php if($_lang->getId() != $this->getCurrentStoreId()) : ?>
+						<a href="<?php echo $_lang->getCurrentUrl() ?>" title="<?php echo $this->escapeHtml($_lang->getName()) ?>">
+							<img src="<?php echo $this->getSkinUrl('images/flags/'.$_lang->getCode().'.png') ?>" alt="" />
+							<span><?php echo $this->escapeHtml($_lang->getName()) ?></span>
+						</a>
+			    	<?php else : ?>
+						<span class="current">
+							<img src="<?php echo $this->getSkinUrl('images/flags/'.$store_code.'.png') ?>" alt="" />
+							<span><?php echo $this->escapeHtml($store_name); ?></span>
+						</span>
+					<?php endif; ?>
+				</li>
+			<?php endforeach; ?>
+
+		</ul>
+
+<?php endif; */?>
+	
